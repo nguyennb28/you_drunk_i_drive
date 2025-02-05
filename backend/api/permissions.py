@@ -7,7 +7,6 @@ class IsRoleAdmin(permissions.BasePermission):
     """
 
     def has_permission(self, request, view):
-        # return super().has_permission(request, view)
         return bool(
             request.user
             and request.user.is_authenticated
@@ -21,7 +20,6 @@ class IsRoleUser(permissions.BasePermission):
     """
 
     def has_permission(self, request, view):
-        # return super().has_permission(request, view)
         return bool(
             request.user
             and request.user.is_authenticated
@@ -35,7 +33,6 @@ class IsRoleDriver(permissions.BasePermission):
     """
 
     def has_permission(self, request, view):
-        # return super().has_permission(request, view)
         return bool(
             request.user
             and request.user.is_authenticated

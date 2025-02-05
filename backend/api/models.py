@@ -26,10 +26,6 @@ class User(AbstractUser):
         verbose_name='Đã xác minh'
     )
 
-    username = None
-    USERNAME_FIELD = 'phone'
-    REQUIRED_FIELDS = []
-
     groups = models.ManyToManyField(
         Group,
         verbose_name='groups',
