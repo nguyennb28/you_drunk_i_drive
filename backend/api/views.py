@@ -6,13 +6,6 @@ from rest_framework import generics, viewsets, permissions
 from .permissions import IsRoleAdmin, IsRoleDriver, IsRoleUser
 from .serializers import (UserSerializer, DriverProfileSerializer)
 
-# Create your views here.
-
-# class CreateUserView(generics.CreateAPIView):
-#     queryset = User.objects.all()
-#     serializer_class = UserSerializer
-#     permission_classes = [permissions.AllowAny]
-
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer

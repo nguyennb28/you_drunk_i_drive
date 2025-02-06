@@ -1,34 +1,19 @@
 from rest_framework import serializers
 from .models import DriverProfile, User
 
-class UserSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        # fields = '__all__'
-        fields = ["id", "username", "phone", "password"]
+        fields = '__all__'
+        # fields = ["id", "username", "phone", "password"]
         extra_kwargs = {"password": {"write_only": True}}
 
-    # def create(self, validated_data):
-    #     password = validated_data.pop('password')
-    #     user = User(**validated_data)
-    #     user.set_password(password)
-    #     user.save()
-    #     return user
-    
-    # def update(self, instance, validated_data):
-    #     if 'password' in validated_data:
-    #         password = validated_data.pop('password')
-    #         instance.set_password(password)
-    #     for attr, value in validated_data.items():
-    #         setattr(instance, attr, value)
-    #     instance.save()
-    #     return instance
     def create(self, validated_data):
         user = User.objects.create_user(**validated_data)
         return user
         
     
-class DriverProfileSerializer(serializers.ModelSerializer):
+class DriverProfileSerializer(serializers.HyperlinkedModelSerializer):
     id_card_front_url = serializers.SerializerMethodField()
     id_card_back_url = serializers.SerializerMethodField()
 
