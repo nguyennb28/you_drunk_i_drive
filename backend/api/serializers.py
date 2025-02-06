@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import DriverProfile, User
 
-class UserSerializer(serializers.HyperlinkedModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = '__all__'
@@ -13,7 +13,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         return user
         
     
-class DriverProfileSerializer(serializers.HyperlinkedModelSerializer):
+class DriverProfileSerializer(serializers.ModelSerializer):
     id_card_front_url = serializers.SerializerMethodField()
     id_card_back_url = serializers.SerializerMethodField()
 
