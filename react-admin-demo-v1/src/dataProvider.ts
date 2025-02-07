@@ -53,4 +53,17 @@ export const dataProvider: DataProvider = {
       total: parseInt(response.headers.get("x-total-count") || "", 10),
     };
   },
+  getOne: async (resource, params) => {
+    const accessToken = localStorage.getItem("access");
+    const response = await fetchUtils.fetchJson(
+      `${import.meta.env.VITE_SIMPLE_REST_URL}/api/${resource}/${params.id}/`,
+      {
+        headers: new Headers({
+          Authorization: `Bearer ${accessToken}`,
+          Accept: "application/json",
+        }),
+      },
+    );
+    return { data: response.json };
+  },
 };
