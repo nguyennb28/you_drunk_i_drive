@@ -45,6 +45,7 @@ export const dataProvider: DataProvider = {
     const response = await fetchUtils.fetchJson(url, {
       headers: new Headers({
         Authorization: `Bearer ${accessToken}`,
+        Accept: "application/json",
       }),
     });
     return {
