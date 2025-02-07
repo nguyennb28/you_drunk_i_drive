@@ -21,6 +21,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         qs = super().get_queryset()
+        # print(QueryDict.dict(self.request.query_params))
         filter_param = self.request.query_params.get('filter')
         if filter_param:
             try:
