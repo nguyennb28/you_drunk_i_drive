@@ -7,8 +7,8 @@ const UserShow = () => (
             {/* <TextField source="last_login" /> */}
             {/* <BooleanField source="is_superuser" /> */}
             <TextField source="username" />
-            <DateField source="first_name" />
-            <DateField source="last_name" />
+            <TextField source="first_name" />
+            <TextField source="last_name" />
             {/* <DateField source="email" /> */}
             {/* <BooleanField source="is_staff" /> */}
             <BooleanField source="is_active" />

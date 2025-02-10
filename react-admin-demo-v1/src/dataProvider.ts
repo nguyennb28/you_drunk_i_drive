@@ -82,7 +82,21 @@ export const dataProvider: DataProvider = {
   // // create a record
   // create: async (resource, params) => {},
   // // update a record based on a patch
-  // update: async (resource, params) => {},
+  update: async (resource, params) => {
+    const accessToken = localStorage.getItem("access")
+    const response = await fetchUtils.fetchJson(
+      `${import.meta.env.VITE_SIMPLE_REST_URL}/api/${resource}/${params.id}/`,
+      {
+        headers: new Headers({
+          Authorization: `Bearer ${accessToken}`,
+          Accept: "application/json",
+        }),
+        method: "PATCH",
+        body: JSON.stringify(params.data)
+      }
+    );
+    return { data: response.json }
+  },
   // // update a list of records based on an array of ids and a common patch
   // updateMany: async (resource, params) => {},
   // // delete a record by id
