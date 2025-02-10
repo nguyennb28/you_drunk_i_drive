@@ -49,7 +49,8 @@ class UserViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         if self.action == "create":
-            permission_classes = [permissions.AllowAny]
+            permission_classes = [IsRoleAdmin]
+            # permission_classes = [permissions.AllowAny]
         else:
             permission_classes = [IsRoleAdmin]
         return [permission() for permission in permission_classes]

@@ -4,26 +4,28 @@ import {
   Edit,
   SimpleForm,
   TextInput,
+  SelectInput,
+  PasswordInput,
+  required,
 } from "react-admin";
 
 const UserEdit = () => (
-  <Edit>
-    <SimpleForm>
-      <TextInput source="id" />
-      <TextInput source="last_login" />
-      <BooleanInput source="is_superuser" />
-      <TextInput source="username" />
+  <Edit redirect="list">
+    <SimpleForm warnWhenUnsavedChanges>
+      <TextInput source="username" required />
+      <PasswordInput source="password" required />
       <TextInput source="first_name" />
       <TextInput source="last_name" />
-      <TextInput source="email" />
-      <BooleanInput source="is_staff" />
-      <BooleanInput source="is_active" />
-      <DateInput source="date_joined" />
-      <TextInput source="role" />
-      <TextInput source="phone" />
-      <BooleanInput source="is_verified" />
-      <TextInput source="groups" />
-      <TextInput source="user_permissions" />
+      <SelectInput
+        source="role"
+        choices={[
+          { id: "customer", name: "customer" },
+          { id: "driver", name: "driver" },
+          { id: "admin", name: "admin" },
+        ]}
+        validate={required()}
+      />
+      <TextInput source="phone" required />
     </SimpleForm>
   </Edit>
 );

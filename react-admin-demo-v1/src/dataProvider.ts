@@ -33,7 +33,7 @@ import { fetchUtils, DataProvider } from "react-admin";
 
 // export const dataProvider = simpleRestProvider(`${import.meta.env.VITE_SIMPLE_REST_URL}`, fetchJson)
 
-export const dataProvider: DataProvider = {
+  export const dataProvider: DataProvider = {
   getList: async (resource, params) => {
     const { page, perPage } = params.pagination;
     const { field, order } = params.sort;
@@ -49,7 +49,6 @@ export const dataProvider: DataProvider = {
     });
     return {
       data: response.json.data,
-      // data: response.json,
       total: parseInt(response.json.total),
       pageInfo: {
         hasNextPage: response.json.hasNextPage,
@@ -80,10 +79,24 @@ export const dataProvider: DataProvider = {
   // // get the records referenced to another record, e.g. comments for a post
   // getManyReference: async (resource, params) => {},
   // // create a record
-  // create: async (resource, params) => {},
+  create: async (resource, params) => {
+    const accessToken = localStorage.getItem("access");
+    const response = await fetchUtils.fetchJson(
+      `${import.meta.env.VITE_SIMPLE_REST_URL}/api/${resource}/`,
+      {
+        headers: new Headers({
+          Authorization: `Bearer ${accessToken}`,
+          Accept: "application/json",
+        }),
+        method: "POST",
+        body: JSON.stringify(params.data),
+      },
+    );
+    return { data: response.json };
+  },
   // // update a record based on a patch
   update: async (resource, params) => {
-    const accessToken = localStorage.getItem("access")
+    const accessToken = localStorage.getItem("access");
     const response = await fetchUtils.fetchJson(
       `${import.meta.env.VITE_SIMPLE_REST_URL}/api/${resource}/${params.id}/`,
       {
@@ -92,10 +105,10 @@ export const dataProvider: DataProvider = {
           Accept: "application/json",
         }),
         method: "PATCH",
-        body: JSON.stringify(params.data)
-      }
+        body: JSON.stringify(params.data),
+      },
     );
-    return { data: response.json }
+    return { data: response.json };
   },
   // // update a list of records based on an array of ids and a common patch
   // updateMany: async (resource, params) => {},
