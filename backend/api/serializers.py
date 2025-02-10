@@ -11,7 +11,16 @@ class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = User.objects.create_user(**validated_data)
         return user
-        
+    
+    def update(self, instance, validated_data):
+        password = validated_data.pop("password", None)
+
+        instance = super().update(instance, validated_data)
+        if password:
+            instance.set_password(password)
+            instance.save()
+        return instance
+
     
 class DriverProfileSerializer(serializers.ModelSerializer):
     id_card_front_url = serializers.SerializerMethodField()
