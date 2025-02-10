@@ -4,16 +4,51 @@ from django.shortcuts import render
 from .models import User, DriverProfile
 from rest_framework import generics, viewsets, permissions
 from .permissions import IsRoleAdmin, IsRoleDriver, IsRoleUser
-from .serializers import (UserSerializer, DriverProfileSerializer)
+from .serializers import UserSerializer, DriverProfileSerializer
 import json
+from rest_framework.pagination import PageNumberPagination
+from rest_framework.response import Response
+from rest_framework.decorators import action
+
+
+class ReactAdminPageNumberPagination(PageNumberPagination):
+    page_query_param = "_page"
+    page_size_query_param = "_limit"
+    page_size = 10
+    max_page_size = 100
+
+    def get_paginated_response(self, data):
+        total = self.page.paginator.count
+
+        # Tính toán thông tin trang
+        page_info = {
+            "hasNextPage": self.page.has_next(),
+            "hasPreviousPage": self.page.has_previous(),
+        }
+
+        # Bạn có thể thêm meta nếu cần, ví dụ như thông tin về trang hiện tại, kích thước trang, …
+        meta = {
+            "currentPage": self.page.number,
+            "pageSize": self.get_page_size(self.request),
+        }
+
+        response_data = {
+            "data": data,
+            "total": total,
+            "pageInfo": page_info,
+            "meta": meta,
+        }
+        return Response(response_data)
+
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    pagination_class = ReactAdminPageNumberPagination
     # permission_classes = [permissions.IsAdminUser]
 
     def get_permissions(self):
-        if self.action == 'create':
+        if self.action == "create":
             permission_classes = [permissions.AllowAny]
         else:
             permission_classes = [IsRoleAdmin]
@@ -21,17 +56,25 @@ class UserViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         qs = super().get_queryset()
-        # print(QueryDict.dict(self.request.query_params))
-        filter_param = self.request.query_params.get('filter')
-        if filter_param:
-            try:
-                filter_data = json.loads(filter_param)
-                qs = qs.filter(**filter_data)
-            except Exception as e:
-                print(f"Lỗi giải mã filter: {e}")
+
+        sort_field = self.request.query_params.get("_sort")
+        print(sort_field)
+        sort_order = self.request.query_params.get("_order", "ASC").upper()
+        if sort_field:
+            qs = qs.order_by(sort_field if sort_order == "ASC" else f"-{sort_field}")
         return qs
-        # return super().get_queryset()
-    
+
+    @action(detail=False, methods=["get"])
+    def get_many(self, request):
+        ids = request.query_params.get("ids")
+        if ids:
+            id_list = ids.split(",")
+            queryset = self.get_queryset().filter(id__in=id_list)
+            serializer = self.get_serializer(queryset, many=True)
+            return Response({"data": serializer.data, "total": len(serializer.data)})
+        return Response({"data": [], "total": 0})
+
+
 # DriverProfile ViewSet
 class DriverProfileViewSet(viewsets.ModelViewSet):
     queryset = DriverProfile.objects.all()
@@ -39,8 +82,7 @@ class DriverProfileViewSet(viewsets.ModelViewSet):
     permission_classes = [IsRoleAdmin]
 
     def get_queryset(self):
-        status = self.request.query_params.get('approval_status')
+        status = self.request.query_params.get("approval_status")
         if status:
             return DriverProfile.objects.filter(approval_status=status)
         return super().get_queryset()
-    

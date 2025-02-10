@@ -1,4 +1,3 @@
-import simpleRestProvider from "ra-data-simple-rest";
 import { fetchUtils, DataProvider } from "react-admin";
 // export const dataProvider = simpleRestProvider(
 //   import.meta.env.VITE_SIMPLE_REST_URL,
@@ -49,8 +48,17 @@ export const dataProvider: DataProvider = {
       }),
     });
     return {
-      data: response.json,
-      total: parseInt(response.headers.get("x-total-count") || "", 10),
+      data: response.json.data,
+      // data: response.json,
+      total: parseInt(response.json.total),
+      pageInfo: {
+        hasNextPage: response.json.hasNextPage,
+        hasPreviousPage: response.json.hasPreviousPage,
+      },
+      meta: {
+        currentPage: response.json.currentPage,
+        pageSize: response.json.pageSize,
+      },
     };
   },
   getOne: async (resource, params) => {
@@ -66,4 +74,19 @@ export const dataProvider: DataProvider = {
     );
     return { data: response.json };
   },
+  // getMany: async (resource, params) => {
+
+  // },
+  // // get the records referenced to another record, e.g. comments for a post
+  // getManyReference: async (resource, params) => {},
+  // // create a record
+  // create: async (resource, params) => {},
+  // // update a record based on a patch
+  // update: async (resource, params) => {},
+  // // update a list of records based on an array of ids and a common patch
+  // updateMany: async (resource, params) => {},
+  // // delete a record by id
+  // delete: async (resource, params) => {},
+  // // delete a list of records based on an array of ids
+  // deleteMany: async (resource, params) => {},
 };

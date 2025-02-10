@@ -66,10 +66,8 @@ const authProvider: AuthProvider = {
     const decoded = jwtDecode(accessToken); // get expiry time
     const tokenExpiration = decoded.exp;
     const now = Date.now() / 1000;
-    console.log(`Token Expiration: ${tokenExpiration}`)
-    console.log(`Time now: ${now}`)
     if (tokenExpiration < now) {
-      await callRefreshToken()
+      await callRefreshToken();
     }
   },
   // remove local credentials and notify the auth server that the user logged out
