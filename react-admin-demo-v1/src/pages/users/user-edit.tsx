@@ -12,8 +12,8 @@ import {
 const UserEdit = () => (
   <Edit redirect="list">
     <SimpleForm warnWhenUnsavedChanges>
-      <TextInput source="username" required />
-      <PasswordInput source="password" required />
+      <TextInput source="username" />
+      <PasswordInput source="password" />
       <TextInput source="first_name" />
       <TextInput source="last_name" />
       <SelectInput
