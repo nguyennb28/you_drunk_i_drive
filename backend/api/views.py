@@ -2,7 +2,7 @@
 # from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.shortcuts import render
 from .models import User, DriverProfile
-from rest_framework import generics, viewsets, permissions
+from rest_framework import generics, viewsets, permissions, status
 from .permissions import IsRoleAdmin, IsRoleDriver, IsRoleUser
 from .serializers import UserSerializer, DriverProfileSerializer
 import json
@@ -59,14 +59,14 @@ class UserViewSet(viewsets.ModelViewSet):
         qs = super().get_queryset()
 
         sort_field = self.request.query_params.get("_sort")
-        print(sort_field)
         sort_order = self.request.query_params.get("_order", "ASC").upper()
         if sort_field:
             qs = qs.order_by(sort_field if sort_order == "ASC" else f"-{sort_field}")
         return qs
 
+    # GET MANY
     @action(detail=False, methods=["get"])
-    def get_many(self, request):
+    def get_many(self, request, *args, **kwargs):
         ids = request.query_params.get("ids")
         if ids:
             id_list = ids.split(",")
@@ -74,6 +74,21 @@ class UserViewSet(viewsets.ModelViewSet):
             serializer = self.get_serializer(queryset, many=True)
             return Response({"data": serializer.data, "total": len(serializer.data)})
         return Response({"data": [], "total": 0})
+        # return Response(
+        #     {"detail": "Chưa cung cấp ids"}, status=status.HTTP_400_BAD_REQUEST
+        # )
+
+    # DELETE MANY
+    @action(detail=False, methods=["post"])
+    def delete_many(self, request, *args, **kwargs):
+        ids = request.data.get("ids", [])
+        if not ids:
+            return Response(
+                {"detail": "No ids provided"}, status=status.HTTP_400_BAD_REQUEST
+            )
+        queryset = self.get_queryset().filter(id__in=ids)
+        deleted_count, _ = queryset.delete()
+        return Response({"data": ids})
 
 
 # DriverProfile ViewSet

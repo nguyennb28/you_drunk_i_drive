@@ -1,4 +1,5 @@
 import { fetchUtils, DataProvider } from "react-admin";
+import queryString from "query-string";
 // export const dataProvider = simpleRestProvider(
 //   import.meta.env.VITE_SIMPLE_REST_URL,
 // );
@@ -23,17 +24,7 @@ import { fetchUtils, DataProvider } from "react-admin";
 //   deleteMany: (resource, params) => Promise,
 // };
 
-// const fetchJson = (url: string, options = {}) => {
-//   options.user = {
-//     authenticated: true,
-//     token: localStorage.getItem('access')
-//   };
-//   return fetchUtils.fetchJson(url, options)
-// }
-
-// export const dataProvider = simpleRestProvider(`${import.meta.env.VITE_SIMPLE_REST_URL}`, fetchJson)
-
-  export const dataProvider: DataProvider = {
+export const dataProvider: DataProvider = {
   getList: async (resource, params) => {
     const { page, perPage } = params.pagination;
     const { field, order } = params.sort;
@@ -73,9 +64,23 @@ import { fetchUtils, DataProvider } from "react-admin";
     );
     return { data: response.json };
   },
-  // getMany: async (resource, params) => {
-
-  // },
+  getMany: async (resource, params) => {
+    const accessToken = localStorage.getItem("access");
+    // const query = {
+    //   ids: params.ids.join(","),
+    // };
+    const response = await fetchUtils.fetchJson(
+      `${import.meta.env.VITE_SIMPLE_REST_URL}/api/${resource}/get_many/?ids=${params.ids}`,
+      {
+        headers: new Headers({
+          Authorization: `Bearer ${accessToken}`,
+          Accept: "application/json",
+        }),
+        signal: params.signal
+      },
+    );
+    return { data: response.json.data };
+  },
   // // get the records referenced to another record, e.g. comments for a post
   // getManyReference: async (resource, params) => {},
   // // create a record
@@ -113,7 +118,37 @@ import { fetchUtils, DataProvider } from "react-admin";
   // // update a list of records based on an array of ids and a common patch
   // updateMany: async (resource, params) => {},
   // // delete a record by id
-  // delete: async (resource, params) => {},
+  delete: async (resource, params) => {
+    const accessToken = localStorage.getItem("access");
+    const response = await fetchUtils.fetchJson(
+      `${import.meta.env.VITE_SIMPLE_REST_URL}/api/${resource}/${params.id}/`,
+      {
+        headers: new Headers({
+          Authorization: `Bearer ${accessToken}`,
+          Accept: "application/json",
+        }),
+        method: "DELETE",
+      },
+    );
+    return {
+      data: response.json.data,
+    };
+  },
   // // delete a list of records based on an array of ids
-  // deleteMany: async (resource, params) => {},
+  deleteMany: async (resource, params) => {
+    const accessToken = localStorage.getItem("access");
+    const response = await fetchUtils.fetchJson(
+      `${import.meta.env.VITE_SIMPLE_REST_URL}/api/${resource}/delete_many/`,
+      {
+        headers: new Headers({
+          Authorization: `Bearer ${accessToken}`,
+          Accept: "application/json",
+        }),
+        method: "POST",
+        body: JSON.stringify({ ids: params.ids }),
+      },
+    );
+    console.log(response.json)
+    return { data: response.json.data };
+  },
 };
