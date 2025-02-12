@@ -61,7 +61,6 @@ class UserViewSet(viewsets.ModelViewSet):
         sort_field = self.request.query_params.get("_sort")
         sort_order = self.request.query_params.get("_order", "ASC").upper()
         query = self.request.query_params.get("_filter")
-        print(f"query: {query}")
         if query and query != "undefined":
             qs = qs.filter(
                 Q(username__icontains=query)
