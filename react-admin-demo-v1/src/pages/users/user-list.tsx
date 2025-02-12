@@ -1,6 +1,7 @@
 import { BooleanField, Datagrid, DateField, List, TextField } from 'react-admin';
+import postFilters from './user-filter';
 const UserList = () => (
-    <List>
+    <List filters={postFilters}>
         <Datagrid>
             <TextField source="username" />
             <TextField source="first_name" />

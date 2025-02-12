@@ -26,11 +26,11 @@ import queryString from "query-string";
 
 export const dataProvider: DataProvider = {
   getList: async (resource, params) => {
+    const { q } = params.filter;
     const { page, perPage } = params.pagination;
     const { field, order } = params.sort;
-
     const accessToken = localStorage.getItem("access");
-    const url = `${import.meta.env.VITE_SIMPLE_REST_URL}/api/${resource}/?_page=${page}&_limit=${perPage}&_sort=${field}&_order=${order}`;
+    const url = `${import.meta.env.VITE_SIMPLE_REST_URL}/api/${resource}/?_page=${page}&_limit=${perPage}&_sort=${field}&_order=${order}&_filter=${q}`;
 
     const response = await fetchUtils.fetchJson(url, {
       headers: new Headers({
@@ -76,7 +76,7 @@ export const dataProvider: DataProvider = {
           Authorization: `Bearer ${accessToken}`,
           Accept: "application/json",
         }),
-        signal: params.signal
+        signal: params.signal,
       },
     );
     return { data: response.json.data };
@@ -148,7 +148,6 @@ export const dataProvider: DataProvider = {
         body: JSON.stringify({ ids: params.ids }),
       },
     );
-    console.log(response.json)
     return { data: response.json.data };
   },
 };

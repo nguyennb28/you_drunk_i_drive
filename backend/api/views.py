@@ -9,6 +9,7 @@ import json
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.decorators import action
+from django.db.models import Q
 
 
 class ReactAdminPageNumberPagination(PageNumberPagination):
@@ -57,9 +58,18 @@ class UserViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         qs = super().get_queryset()
-
         sort_field = self.request.query_params.get("_sort")
         sort_order = self.request.query_params.get("_order", "ASC").upper()
+        query = self.request.query_params.get("_filter")
+        print(f"query: {query}")
+        if query and query != "undefined":
+            qs = qs.filter(
+                Q(username__icontains=query)
+                | Q(phone__icontains=query)
+                | Q(role__icontains=query)
+                | Q(first_name__icontains=query)
+                | Q(last_name__icontains=query)
+            )
         if sort_field:
             qs = qs.order_by(sort_field if sort_order == "ASC" else f"-{sort_field}")
         return qs
