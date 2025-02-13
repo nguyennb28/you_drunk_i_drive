@@ -25,14 +25,21 @@ import { stringify } from "query-string";
 //   deleteMany: (resource, params) => Promise,
 // };
 
+// const cleanFilter = (obj: {}) => {
+//   return Object.entries(obj || {}).reduce((acc, [key, value]) => {
+//     if (value && value !== "undefined") {
+//       console.log(key);
+//       acc[key] = value;
+//     }
+//     return acc;
+//   }, {});
+// };
 const cleanFilter = (obj: {}) => {
-  return Object.entries(obj || {}).reduce((acc, [key, value]) => {
-    if (value && value !== "undefined") {
-      console.log(key);
-      acc[key] = value;
-    }
-    return acc;
-  }, {});
+  return Object.fromEntries(
+    Object.entries(obj || {}).filter(
+      ([_, value]) => value !== undefined && value !== "",
+    ),
+  );
 };
 
 export const dataProvider: DataProvider = {
