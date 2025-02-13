@@ -60,8 +60,9 @@ class UserViewSet(viewsets.ModelViewSet):
         qs = super().get_queryset()
         sort_field = self.request.query_params.get("_sort")
         sort_order = self.request.query_params.get("_order", "ASC").upper()
-        query = self.request.query_params.get("_filter")
-        if query and query != "undefined":
+        query = self.request.query_params.get("q")
+        role = self.request.query_params.get("role")
+        if query:
             qs = qs.filter(
                 Q(username__icontains=query)
                 | Q(phone__icontains=query)
@@ -69,6 +70,8 @@ class UserViewSet(viewsets.ModelViewSet):
                 | Q(first_name__icontains=query)
                 | Q(last_name__icontains=query)
             )
+        if role:
+            qs = qs.filter(role=role)
         if sort_field:
             qs = qs.order_by(sort_field if sort_order == "ASC" else f"-{sort_field}")
         return qs

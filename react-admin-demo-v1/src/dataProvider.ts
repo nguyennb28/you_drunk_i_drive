@@ -1,5 +1,6 @@
 import { fetchUtils, DataProvider } from "react-admin";
 import queryString from "query-string";
+import { stringify } from "query-string";
 // export const dataProvider = simpleRestProvider(
 //   import.meta.env.VITE_SIMPLE_REST_URL,
 // );
@@ -24,13 +25,31 @@ import queryString from "query-string";
 //   deleteMany: (resource, params) => Promise,
 // };
 
+const cleanFilter = (obj: {}) => {
+  return Object.entries(obj || {}).reduce((acc, [key, value]) => {
+    if (value && value !== "undefined") {
+      console.log(key);
+      acc[key] = value;
+    }
+    return acc;
+  }, {});
+};
+
 export const dataProvider: DataProvider = {
   getList: async (resource, params) => {
     const { q } = params.filter;
     const { page, perPage } = params.pagination;
     const { field, order } = params.sort;
     const accessToken = localStorage.getItem("access");
-    const url = `${import.meta.env.VITE_SIMPLE_REST_URL}/api/${resource}/?_page=${page}&_limit=${perPage}&_sort=${field}&_order=${order}&_filter=${q}`;
+    const query = {
+      ...cleanFilter(params.filter),
+      _sort: field,
+      _order: order,
+      _page: page,
+      _limit: perPage,
+    };
+    // const url = `${import.meta.env.VITE_SIMPLE_REST_URL}/api/${resource}/?_page=${page}&_limit=${perPage}&_sort=${field}&_order=${order}&_filter=${q}`;
+    const url = `${import.meta.env.VITE_SIMPLE_REST_URL}/api/${resource}/?${stringify(query)}`;
 
     const response = await fetchUtils.fetchJson(url, {
       headers: new Headers({

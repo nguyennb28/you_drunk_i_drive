@@ -13,9 +13,21 @@ import { Chip } from "@mui/material";
 //   <SearchInput source="q" alwaysOn />,
 //   <QuickFilter source="admin" label="Role" defaultValue={"admin"} />,
 // ];
+// const postFilters = [
+//     <SearchInput source="q" alwaysOn resettable/>
+// ]
+
+const QuickFilter = ({
+  label,
+}: {
+  label: string;
+  source?: string;
+  defaultValue?: any;
+}) => <Chip sx={{ marginBottom: 1 }} label={label} />;
+
 const postFilters = [
-    // <TextInput label="Search" source="q" alwaysOn/>,
-    <SearchInput source="q" alwaysOn resettable/>
-]
+  <SearchInput source="q" alwaysOn />,
+  <QuickFilter label="Driver" source="role" defaultValue={"driver"} />,
+];
 
 export default postFilters;
