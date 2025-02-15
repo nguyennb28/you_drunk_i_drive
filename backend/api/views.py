@@ -58,10 +58,15 @@ class UserViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         qs = super().get_queryset()
+
+        # Retrieve query parameters
         sort_field = self.request.query_params.get("_sort")
         sort_order = self.request.query_params.get("_order", "ASC").upper()
-        query = self.request.query_params.get("_filter")
-        if query and query != "undefined":
+        query = self.request.query_params.get("q")
+        role = self.request.query_params.get("role")
+
+        # Apply filters based on query parameters
+        if query:
             qs = qs.filter(
                 Q(username__icontains=query)
                 | Q(phone__icontains=query)
@@ -69,8 +74,19 @@ class UserViewSet(viewsets.ModelViewSet):
                 | Q(first_name__icontains=query)
                 | Q(last_name__icontains=query)
             )
+
+        if role:
+            qs = qs.filter(role=role)
+
+        # Apply sorting
         if sort_field:
-            qs = qs.order_by(sort_field if sort_order == "ASC" else f"-{sort_field}")
+            order_by_field = (
+                f"{sort_order.lower()}-{sort_field}"
+                if sort_order == "DESC"
+                else sort_field
+            )
+            qs = qs.order_by(order_by_field)
+
         return qs
 
     # GET MANY
