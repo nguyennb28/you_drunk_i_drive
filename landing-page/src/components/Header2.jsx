@@ -29,6 +29,8 @@ import {
   DocumentCheckIcon,
 } from "@heroicons/react/20/solid";
 
+import { NavLink, Link } from "react-router";
+
 const products = [
   {
     name: "Tài xế ô tô",
@@ -68,14 +70,22 @@ export default function Header2() {
         className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8"
       >
         <div className="flex lg:flex-1">
-          <a href="#" className="-m-1.5 p-1.5">
+          {/* <a href="#" className="-m-1.5 p-1.5">
             <span className="sr-only">Your Company</span>
             <img
               alt="Logo"
               src="https://tailwindui.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
               className="h-8 w-auto"
             />
-          </a>
+          </a> */}
+          <Link to="/" className="-m-1.5 p-1.5">
+            <span className="sr-only">Your Company</span>
+            <img
+              alt="Logo"
+              src="https://tailwindui.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
+              className="h-8 w-auto"
+            />
+          </Link>
         </div>
         <div className="flex lg:hidden">
           <button
@@ -90,7 +100,12 @@ export default function Header2() {
         <PopoverGroup className="hidden lg:flex lg:gap-x-12">
           <Popover className="relative">
             <PopoverButton className="flex items-center gap-x-1 text-sm/6 font-semibold text-gray-900">
-              Dịch vụ
+              <Link
+                to="/services"
+                className="text-sm/6 font-semibold text-gray-900"
+              >
+                Dịch vụ
+              </Link>
               <ChevronDownIcon
                 aria-hidden="true"
                 className="size-5 flex-none text-gray-400"
@@ -148,7 +163,7 @@ export default function Header2() {
 
           <Popover className="relative">
             <PopoverButton className="flex items-center gap-x-1 text-sm/6 font-semibold text-gray-900">
-              Dịch vụ liên kết
+              <Link to="/sub-services" className="text-sm/6 font-semibold text-gray-900">Dịch vụ liên kết</Link>
               <ChevronDownIcon
                 aria-hidden="true"
                 className="size-5 flex-none text-gray-400"
@@ -187,15 +202,25 @@ export default function Header2() {
             </PopoverPanel>
           </Popover>
 
-          <a href="#" className="text-sm/6 font-semibold text-gray-900">
+
+          <Link to="/about" className="text-sm/6 font-semibold text-gray-900">
             Về chúng tôi
-          </a>
-          <a href="#" className="text-sm/6 font-semibold text-gray-900">
+          </Link>
+          <Link to="/news" className="text-sm/6 font-semibold text-gray-900">
             Tin tức
-          </a>
-          <a href="#" className="text-sm/6 font-semibold text-gray-900">
+          </Link>
+          <Link to="/contact" className="text-sm/6 font-semibold text-gray-900">
             Liên hệ
-          </a>
+          </Link>
+          {/* <a href="#" className="text-sm/6 font-semibold text-gray-900">
+            Về chúng tôi
+          </a> */}
+          {/* <a href="#" className="text-sm/6 font-semibold text-gray-900">
+            Tin tức
+          </a> */}
+          {/* <a href="#" className="text-sm/6 font-semibold text-gray-900">
+            Liên hệ
+          </a> */}
         </PopoverGroup>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
           <a href="#" className="text-sm/6 font-semibold text-gray-900">
