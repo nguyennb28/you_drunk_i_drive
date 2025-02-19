@@ -9,10 +9,13 @@ import Contact from "./pages/Contact.jsx";
 import News from "./pages/News.jsx";
 import Services from "./pages/Services.jsx";
 import SubServices from "./pages/SubServices.jsx";
+import Footer from "./components/Footer";
+import Header2 from "./components/Header2.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <Router>
+      <Header2 />
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="services" element={<Services />} />
@@ -21,7 +24,7 @@ createRoot(document.getElementById("root")).render(
         <Route path="about" element={<About />} />
         <Route path="contact" element={<Contact />} />
       </Routes>
-      {/* <App /> */}
+      <Footer />
     </Router>
   </StrictMode>
 );

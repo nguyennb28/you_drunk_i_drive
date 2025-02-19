@@ -11,15 +11,9 @@ import {
   PopoverPanel,
 } from "@headlessui/react";
 import {
-  ArrowPathIcon,
   Bars3Icon,
-  ChartPieIcon,
-  CursorArrowRaysIcon,
-  FingerPrintIcon,
-  SquaresPlusIcon,
   XMarkIcon,
   TruckIcon,
-  MapPinIcon,
   MapIcon,
 } from "@heroicons/react/24/outline";
 import {
@@ -29,7 +23,7 @@ import {
   DocumentCheckIcon,
 } from "@heroicons/react/20/solid";
 
-import { NavLink, Link } from "react-router";
+import { Link } from "react-router";
 
 const products = [
   {
@@ -163,7 +157,12 @@ export default function Header2() {
 
           <Popover className="relative">
             <PopoverButton className="flex items-center gap-x-1 text-sm/6 font-semibold text-gray-900">
-              <Link to="/sub-services" className="text-sm/6 font-semibold text-gray-900">Dịch vụ liên kết</Link>
+              <Link
+                to="/sub-services"
+                className="text-sm/6 font-semibold text-gray-900"
+              >
+                Dịch vụ liên kết
+              </Link>
               <ChevronDownIcon
                 aria-hidden="true"
                 className="size-5 flex-none text-gray-400"
@@ -202,7 +201,6 @@ export default function Header2() {
             </PopoverPanel>
           </Popover>
 
-
           <Link to="/about" className="text-sm/6 font-semibold text-gray-900">
             Về chúng tôi
           </Link>
@@ -212,15 +210,6 @@ export default function Header2() {
           <Link to="/contact" className="text-sm/6 font-semibold text-gray-900">
             Liên hệ
           </Link>
-          {/* <a href="#" className="text-sm/6 font-semibold text-gray-900">
-            Về chúng tôi
-          </a> */}
-          {/* <a href="#" className="text-sm/6 font-semibold text-gray-900">
-            Tin tức
-          </a> */}
-          {/* <a href="#" className="text-sm/6 font-semibold text-gray-900">
-            Liên hệ
-          </a> */}
         </PopoverGroup>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
           <a href="#" className="text-sm/6 font-semibold text-gray-900">
@@ -311,24 +300,24 @@ export default function Header2() {
                     ))}
                   </DisclosurePanel>
                 </Disclosure>
-                <a
-                  href="#"
+                <Link
+                  to="/about"
                   className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
                 >
                   Về chúng tôi
-                </a>
-                <a
-                  href="#"
+                </Link>
+                <Link
+                  to="/news"
                   className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
                 >
                   Tin tức
-                </a>
-                <a
-                  href="#"
+                </Link>
+                <Link
+                  to="/contact"
                   className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
                 >
                   Liên hệ
-                </a>
+                </Link>
               </div>
               <div className="py-6">
                 <a
