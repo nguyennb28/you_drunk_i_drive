@@ -11,15 +11,9 @@ import {
   PopoverPanel,
 } from "@headlessui/react";
 import {
-  ArrowPathIcon,
   Bars3Icon,
-  ChartPieIcon,
-  CursorArrowRaysIcon,
-  FingerPrintIcon,
-  SquaresPlusIcon,
   XMarkIcon,
   TruckIcon,
-  MapPinIcon,
   MapIcon,
 } from "@heroicons/react/24/outline";
 import {
@@ -29,7 +23,7 @@ import {
   DocumentCheckIcon,
 } from "@heroicons/react/20/solid";
 
-import { NavLink, Link } from "react-router";
+import { Link } from "react-router";
 
 const products = [
   {
